@@ -40,7 +40,8 @@ function RegistrarUsuario(req, res) {
   var parametros = req.body;
   var usuarioModel = new Usuario();
 
-  if (parametros.email && parametros.password && parametros.extencion) {
+  if (parametros.email && parametros.password && parametros.nombre 
+    && parametros.apellido && parametros.pais) {
     usuarioModel.nombre = parametros.nombre;
     usuarioModel.email = parametros.email;
     usuarioModel.apellido = parametros.apellido;
