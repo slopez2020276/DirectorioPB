@@ -9,7 +9,7 @@ const usuarioController = require("./src/controllers/usuario.controller");
 
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false); 
-mongoose.connect('mongodb+srv://desjr:desjr@cluster0.p6rh7.mongodb.net/?retryWrites=true&w=majority' , {
+mongoose.connect('mongodb+srv://des:des@cluster0.hpgumvw.mongodb.net/?retryWrites=true&w=majority' , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
