@@ -51,7 +51,7 @@ function RegistrarUsuario(req, res) {
     usuarioModel.extencion = parametros.extencion
     usuarioModel.sucursal = parametros.sucursal
     usuarioModel.pais= parametros.pais
-    usuarioModel.rol = "Usuario";
+    usuarioModel.rol = parametros.puesto;
 
     Usuario.find({ email: parametros.email }, (err, usuarioEncontrado) => {
       if (usuarioEncontrado.length == 0) {
@@ -103,7 +103,7 @@ function Login(req, res) {
               usuarioEncontrado.password = undefined;
               return res.status(200).send({ usuario: usuarioEncontrado });
             }
-          } else {
+          }else {
             return res
               .status(500)
               .send({ mensaje: "Las contraseña no coincide" });
@@ -338,6 +338,57 @@ function ObterneruserLog(req,res){
       return res.send({ mensaje: 'error al obtener '})
     }
    })
+}
+
+function CrearGerente(req,res ){
+ var parametros = req.body;
+ 
+  if (parametros.rol == 'Gerente'){
+     if (parametros.nombre && parametros.email) {
+    Usuario.find({ email: parametros.email }, (err, gerenteEncontrado) => {
+      if (gerenteEncontrado.length > 0) {
+        return res
+          .status(500)
+          .send({ message: "Este correo esta en uso por otro administrador" });
+      } else {
+        usuarioModel.nombre = parametros.nombre;
+        usuarioModel.email = parametros.email;
+        usuarioModel.rol = "Gerente";
+        bcrypt.hash(
+          parametros.password,
+          null,
+          null,
+          (err, passwordEncriptada) => {
+            usuarioModel.password = passwordEncriptada;
+
+            usuarioModel.save((err, gerenteGuardado) => {
+              if (err)
+                return res
+                  .status(500)
+                  .send({ mensaje: "Error en la peticion" });
+              if (!gerenteGuardado)
+                return res
+                  .status(500)
+                  .send({ mensaje: "Error al guardar el gerente" });
+              return res.status(200).send({ gerente: "gerenteGuardado" });
+            });
+          }
+        );
+      }
+    });
+  } else {
+    return res
+      .status(404)
+      .send({ mensaje: "Debe ingresar los parametros obligatorios" });
+  }
+  }else if(parametros.rol==''){
+
+  }else if(parametros.rol==''){
+
+  }else if(parametros.rol==''){
+
+  }
+  
 }
 
 

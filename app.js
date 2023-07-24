@@ -13,22 +13,23 @@ const factura = require("./src/routes/factura.routes");
 const carrito = require("./src/routes/carrito.routes")
 const servicios = require("./src/routes/servicios.routes");
 const tipoEvRoutes = require("./src/routes/tipoEvento.router");
+const departamento = require("./src/routes/departamento.routes");
 
 
 // MIDDLEWARES
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.json()); 
 
 // CABECERAS
 app.use(cors());
 
 // CARGA DE RUTAS localhost:3000/api/productos
-app.use("/api", hotelesRoutes, userRoutes, habitacionesRoutes, eventosRoutes, reservacion, servicios, factura,carrito);
+app.use("/api", hotelesRoutes, userRoutes, habitacionesRoutes, eventosRoutes, reservacion, servicios, factura,carrito, departamento);
 
 
 module.exports = app;
 
-app.use("/api", hotelesRoutes, userRoutes, habitacionesRoutes, eventosRoutes, tipoEvRoutes,factura,carrito);
+app.use("/api", hotelesRoutes, userRoutes, habitacionesRoutes, eventosRoutes, tipoEvRoutes,factura,carrito,departamento);
 
 module.exports = app;
 
