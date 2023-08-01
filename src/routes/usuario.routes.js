@@ -1,6 +1,7 @@
 const express = require('express');
 const controladorUsuario = require('../controllers/usuario.controller');
 const md_autenticacion = require('../middlewares/autenticacion');
+const cors = require('cors');
 const md_rol = require('../middlewares/roles');
 
 const api = express.Router();

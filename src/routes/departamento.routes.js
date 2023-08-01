@@ -8,7 +8,10 @@ const md_rol = require("../middlewares/roles");
 const api = express.Router();
 
 
-api.post('/resgistrarDepto', controllersdepartamento.addDepto)
+api.post('/resgistrarDepto', controllersdepartamento.addDepto),
+api.put('/editarDepot/:idDeptos',controllersdepartamento.editarDepto),
+
+
 
 
 module.exports = api;

@@ -4,15 +4,7 @@ const app = express();
 
 // IMPORTACION RUTAS
 //const usuarioRoutes = require("./src/routes/usuario.routes");
-const hotelesRoutes = require("./src/routes/hotel.routes");
-const habitacionesRoutes = require("./src/routes/habitaciones.routes");
-const eventosRoutes = require("./src/routes/eventos.routes");
 const userRoutes = require("./src/routes/usuario.routes");
-const reservacion = require("./src/routes/reservacion.routes");
-const factura = require("./src/routes/factura.routes");
-const carrito = require("./src/routes/carrito.routes")
-const servicios = require("./src/routes/servicios.routes");
-const tipoEvRoutes = require("./src/routes/tipoEvento.router");
 const departamento = require("./src/routes/departamento.routes");
 
 
@@ -20,16 +12,17 @@ const departamento = require("./src/routes/departamento.routes");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
 
+const corsOptions = {
+    origin: '',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  };
 // CABECERAS
-app.use(cors());
+app.use(cors(corsOptions));
 
 // CARGA DE RUTAS localhost:3000/api/productos
-app.use("/api", hotelesRoutes, userRoutes, habitacionesRoutes, eventosRoutes, reservacion, servicios, factura,carrito, departamento);
 
-
-module.exports = app;
-
-app.use("/api", hotelesRoutes, userRoutes, habitacionesRoutes, eventosRoutes, tipoEvRoutes,factura,carrito,departamento);
+app.use("/api", userRoutes, departamento);
 
 module.exports = app;
 

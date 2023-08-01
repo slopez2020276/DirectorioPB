@@ -1,6 +1,5 @@
 const Usuario = require("../models/usuario.model");
 const bcrypt = require("bcrypt-nodejs");
-const Carrito = require("../models/carrito.model");
 const jwt = require("../services/jwt");
 const { param } = require("../routes/usuario.routes");
 

@@ -22,6 +22,34 @@ if(params.nombre){
 }
 }
 
+function editarDepto(req,res){
+    var iddatp = req.params.idDeptos;
+    var update = req.body;
+    Departamento.findByIdAndUpdate(iddatp,update,{new:true},(err,deptoUpdate)=>{
+        if(err){
+            return res.status(500).send({mesaje:'error en la petiocn'})
+        }else if (deptoUpdate){
+            return res.status(200).send({mesaje:'departamento Editado',departamentos:deptoUpdate})
+        }else{
+            return res.status(500).send({mesaje:'error al editar el departamento'})
+        }
+    })
+    
+}
+function eliminarDepot(req,res){
+    var idDepto = req.params.idDeptos;
+    Departamento.findByIdAndDelete(idDepto,{new:true},(err,deptoUpdate)=>{
+        if(err){
+            return res.status(500).send({mensaje:'error en la peticion'})
+        }else if (deptoUpdate){
+            return res.status(200).send({mensaje:''})
+        }else{
+
+        }
+    })
+}
 module.exports = {
-    addDepto
+    addDepto,
+    editarDepto,
+
 }
