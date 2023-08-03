@@ -390,6 +390,13 @@ function CrearGerente(req,res ){
   
 }
 
+function ValidarUsuario(req,res){
+  var parametros = req.body;
+ 
+    
+
+}
+
 
 module.exports = {
   RegistrarAd,
