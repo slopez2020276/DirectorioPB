@@ -10,7 +10,7 @@ const validatorConntroller = require('./src/controllers/Validator')
 
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false); 
-mongoose.connect('mongodb://127.0.0.1/DirectorioPrueba1' , {
+mongoose.connect('mongodb+srv://des:des@cluster0.hpgumvw.mongodb.net/?retryWrites=true&w=majority' , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
