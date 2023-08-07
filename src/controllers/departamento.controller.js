@@ -51,5 +51,6 @@ function eliminarDepot(req,res){
 module.exports = {
     addDepto,
     editarDepto,
+    eliminarDepot
 
 }
