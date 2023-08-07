@@ -6,6 +6,7 @@ const controladorVali = require('../controllers/Validator');
 const api = express.Router();
 
 
-api.post('/editarPassword' ,controladorVali.Validarpassword);
+api.post('/validarPassword' ,controladorVali.Validarpassword);
+api.put('/editarPassword' ,controladorVali.editarPassword);
 
 module.exports = api;

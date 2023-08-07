@@ -50,10 +50,34 @@ function crearPassworddef(req,res){
       }
     })
  }
+ function editarPassword(req,res){
+  Validator.findOne({},(err,passwordEncontrado)=>{
+    if(err){
+      return res.status(500).send({mensaje:'Error en la peticion'});
+    }else if (passwordEncontrado){
+      var idpassword = passwordEncontrado._id;
+      var update = req.body;
+      Validator.findByIdAndUpdate(idpassword,update,{new:true},(err,passwordUpdate)=>{
+        if(err){
+          return res.status(500).send({mensaje:'Error en la peticion'});
+        }else if (passwordUpdate){
+          return res.status(200).send({mensaje:'Se actualizo la contraseña'});
+        }else{
+          return res.status(500).send({mensaje:'No se actualizo la contraseña'});
+        }
+      })
+    }
+
+
+
+  })
+  
+ }
  
 
   module.exports = {
     crearPassworddef,
-    Validarpassword
+    Validarpassword,
+    editarPassword
   }
   
