@@ -88,21 +88,7 @@ function tieneNumeros(str) {
 function editarPassword(req, res) {
   const newPassword = req.body.password; // Supongo que recibes la nueva contraseña en req.body
 
-  // Validación de longitud mínima de contraseña
-  if (newPassword.length < 8) {
-    return res.status(400).send({ mensaje: 'La contraseña debe tener al menos 8 caracteres' });
-  }
-
-  // Validación de caracteres especiales
-  if (!tieneCaracteresEspeciales(newPassword)) {
-    return res.status(400).send({ mensaje: 'La contraseña debe contener al menos un carácter especial' });
-  }
-
-  // Validación de números
-  if (!tieneNumeros(newPassword)) {
-    return res.status(400).send({ mensaje: 'La contraseña debe contener al menos un número' });
-  }
-
+  
   // Encuentra el registro del Validator con el rol 'USUARIO'
   Validator.findOne({ rol: 'USUARIO' }, (err, passwordEncontrado) => {
     if (err) {
