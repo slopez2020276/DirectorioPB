@@ -1,16 +1,15 @@
 const Usuario = require("../models/usuario.model");
 const bcrypt = require("bcrypt-nodejs");
 const jwt = require("../services/jwt");
-const { param } = require("../routes/usuario.routes");
-
 function RegistrarAd(req, res) {
   let usuarioModelo = new Usuario();
 
   usuarioModelo.nombre = "SuperAdmin";
   usuarioModelo.usuario = "SuperAdmin";
   usuarioModelo.email = "Superadmin";
-  usuarioModelo.rol = "ADMIN";
+  usuarioModelo.rol = "ADMINP";
   usuarioModelo.password = "12345";
+
 
   Usuario.find({
     $or: [{ usuario: usuarioModelo.usuario }],
@@ -20,15 +19,39 @@ function RegistrarAd(req, res) {
     if (buscarUsuario && buscarUsuario.length >= 1) {
       console.log("Usuario Super Admin creado con anterioridad");
     } else {
-      bcrypt.hash(usuarioModelo.password, null, null, (err, passCrypt) => {
-        usuarioModelo.password = passCrypt;
-      });
-
       usuarioModelo.save((err, usuarioGuardado) => {
         if (err) return console.log("ERROR al crear el usuario Admin");
 
         if (usuarioGuardado) {
           console.log("Usuario Super Admin Creado");
+        }
+      });
+    }
+  });
+}
+function RegistrarPASSWORD(req, res) {
+  let usuarioModelo = new Usuario();
+
+  usuarioModelo.nombre = "USER";
+  usuarioModelo.usuario = "USER";
+  usuarioModelo.email = "USER";
+  usuarioModelo.rol = "USUARIOP";
+  usuarioModelo.password = "123456";
+
+
+  Usuario.find({
+    $or: [{ usuario: usuarioModelo.usuario }],
+  }).exec((err, buscarUsuario) => {
+    if (err) return console.log("ERROR en la peticion");
+
+    if (buscarUsuario && buscarUsuario.length >= 1) {
+      console.log("password del usuario  creada con anterioridad");
+    } else {
+      usuarioModelo.save((err, usuarioGuardado) => {
+        if (err) return console.log("ERROR al crear el usuario Admin");
+
+        if (usuarioGuardado) {
+          console.log("Usuario password Creado");
         }
       });
     }
@@ -50,28 +73,19 @@ function RegistrarUsuario(req, res) {
     usuarioModel.extencion = parametros.extencion
     usuarioModel.sucursal = parametros.sucursal
     usuarioModel.pais= parametros.pais
-    usuarioModel.rol = parametros.puesto;
+    usuarioModel.rol = 'USUARIO';
 
     Usuario.find({ email: parametros.email }, (err, usuarioEncontrado) => {
       if (usuarioEncontrado.length == 0) {
-        bcrypt.hash(
-          parametros.password,
-          null,
-          null,
-          (err, passwordEncriptada) => {
-            usuarioModel.password = passwordEncriptada;
-
-            usuarioModel.save((err, usuarioGuardado) => {
-              if(err) return res.status(500).send({ mensaje:'error en la peticion 1'});
-              else if(usuarioGuardado) {
-                return res.status(200).send({ mensaje:'el usuario se creo correctamente',})
-              }else{
-                return res.send({ mensaje: 'error al guardar el usuario' })
-              }
-           });
-          }
-        );
-      } else {
+          usuarioModel.save((err, usuarioGuardado) => {
+            if(err) return res.status(500).send({ mensaje:'error en la peticion 1'});
+            else if(usuarioGuardado) {
+              return res.status(200).send({ mensaje:'el usuario se creo correctamente',})
+            }else{
+              return res.send({ mensaje: 'error al guardar el usuario' })
+            }
+         })
+       } else {
         return res
           .status(500)
           .send({ mensaje: "Este correo, ya  se encuentra utilizado" });
@@ -84,22 +98,17 @@ function RegistrarUsuario(req, res) {
   }
 }
 
-function Login(req, res) {
+function Logina(req, res) {
   var parametros = req.body;
   Usuario.findOne({ email: parametros.email }, (err, usuarioEncontrado) => {
     if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
     if (usuarioEncontrado) {
-      bcrypt.compare(
-        parametros.password,
-        usuarioEncontrado.password,
-        (err, verificacionPassword) => {
-          if (verificacionPassword) {
+          if (usuarioEncontrado.password == parametros.password) {
             if (parametros.obtenerToken == "true") {
               return res
                 .status(200)
                 .send({ token: jwt.crearToken(usuarioEncontrado) });
-            } else {
-              usuarioEncontrado.password = undefined;
+            } else { 
               return res.status(200).send({ usuario: usuarioEncontrado });
             }
           }else {
@@ -107,8 +116,8 @@ function Login(req, res) {
               .status(500)
               .send({ mensaje: "Las contraseña no coincide" });
           }
-        }
-      );
+        
+      ;
     } else {
       return res
         .status(500)
@@ -116,6 +125,67 @@ function Login(req, res) {
     }
   });
 }
+
+
+
+function Login(req,res){
+  var parametros = req.body;
+  var passwordBody = parametros.password;
+
+  Validator.findOne({password: passwordBody}, (err, rolEncontrado)=>{
+    if(err){
+      res.status(500).send({mensaje: "Error en la peticion"});
+    }else if(rolEncontrado){
+      if(rolEncontrado.rol=='ADMINP'){
+        Usuario.findOne({usuario:'SuperAdmin'},(err,usuarioEncontrado)=>{
+          if(err){
+            return res.status(200).send({mensaje: "Error en la peticion"});
+          }else if (usuarioEncontrado){
+            Usuario.findOne({email:'SuperAdmin'},(err,usuariofinded)=>{
+              if(err){
+                return res.status(500).send({mensaje: "Error en la peticion"});
+              }else if(usuariofinded){
+                if (parametros.obtenerToken == "true") {
+                  return res.status(200).send({ token: jwt.crearToken(usuariofinded) });
+                } else { 
+                  return res.status(200).send({ usuario: usuariofinded });
+                }
+              }
+            })
+          }else if (rolEncontrado.rol=='USUARIO'){
+            Usuario.findOne({email:'USUARIO'},(err,usuariofinded)=>{
+              if(err){
+                return res.status(500).send({mensaje: "Error en la peticion"});
+              }else if(usuariofinded){
+                if (parametros.obtenerToken == "true") {
+                  return res
+                    .status(200).send({ token: jwt.crearToken(usuariofinded) });
+                } else { 
+                  return res.status(200).send({ usuario: usuariofinded });
+                }
+              }
+            })
+
+          }
+        })
+      }else{
+
+      }
+            if (parametros.obtenerToken == "true") {
+              return res
+                .status(200)
+                .send({ token: jwt.crearToken(rolEncontrado) });
+            } else {
+              return res.status(200).send({ usuario: rolEncontrado });
+            }
+    }else{
+      return res.status(200).send({mesaje: 'Ingrese la contraseña correcta '})
+
+
+    }
+  })
+}
+
 
 function crearGerente(req, res) {
   let parametros = req.body;
@@ -314,7 +384,7 @@ function eliminarUsuario(req, res) {
 }
 
 function ObtenerUsuarios(req,res){
-  Usuario.find({rol:'Usuario'}, (err,usuariosEncontrados)=>{
+  Usuario.find({rol:'USUARIO'}, (err,usuariosEncontrados)=>{
     if(err){return res.status(500).send('error en la peticion 1');
     }else if(usuariosEncontrados){
       return res.status(200).send({usuario:usuariosEncontrados});
@@ -397,6 +467,39 @@ function ValidarUsuario(req,res){
 
 }
 
+function Editarpassword(req,res){
+  var idUser = req.params.idUser;
+  var params = req.body;
+  var password = params.password;
+  var passwordNueva = params.passwordNueva;
+
+  Usuario.findOne({rol:'ADMIN'},(err,usuarioEncontrado)=>{
+    if(err){
+      return res.status(500).send({mensaje:'error en la peticion 1'});
+    }else if(usuarioEncontrado){
+      bcrypt.compare(password,usuarioEncontrado.password,(err,passwordOk)=>{
+        if(passwordOk){
+          bcrypt.hash(passwordNueva,null,null,(err,passEncriptada)=>{
+            Usuario.findByIdAndUpdate(idUser,{password:passEncriptada},{new:true},(err,usuarioActualizado)=>{
+              if(err){
+                return res.status(500).send({mensaje:'error en la peticion 2'});
+              }else if(usuarioActualizado){
+                return res.status(200).send({usuario:usuarioActualizado});
+              }else{
+                return res.status(500).send({mensaje:'no se pudo actualizar el usuario'});
+              }
+            })
+          })
+        }else{
+          return res.status(500).send({mensaje:'la contraseña no coincide'});
+        }
+      })
+    }else{
+      return res.status(500).send({mensaje:'no se encontro el usuario'});
+    }
+  })  
+}
+
 
 module.exports = {
   RegistrarAd,
@@ -409,5 +512,7 @@ module.exports = {
   crearGerente,
   ObtenerUsuarios,
   ObterneruserLog,
-  EditarUsuarios
+  EditarUsuarios,
+  Editarpassword,
+  RegistrarPASSWORD
 };

@@ -8,9 +8,10 @@ const validatorConntroller = require('./src/controllers/Validator')
 
 
 
+
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false); 
-mongoose.connect('mongodb+srv://des:des@cluster0.hpgumvw.mongodb.net/?retryWrites=true&w=majority' , {
+mongoose.connect('mongodb://127.0.0.1/DirectorioPrueba1' , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -18,7 +19,10 @@ mongoose.connect('mongodb+srv://des:des@cluster0.hpgumvw.mongodb.net/?retryWrite
     console.log("Se ha conectado correctamente a la base de datos.");
 
     usuarioController.RegistrarAd();
+    usuarioController.RegistrarPASSWORD();
     validatorConntroller.crearPassworddef();
+    validatorConntroller.crearPassworUser();
+
       const PORT = process.env.PORT || 3000
     app.listen(PORT, function () {
       console.log(

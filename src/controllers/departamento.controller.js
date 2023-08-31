@@ -6,9 +6,15 @@ function addDepto(req,res){
     var params = req.body;
 
 if(params.nombre){
-    departamento.nombre = params.nombre;
-    departamento.descripcion = params.descripcion;
-    departamento.save((err, departamentoGuardado)=>{
+    Departamento.findOne({nombre: params.nombre},(err,departamentoEncontrado)=>{
+        if(err){
+            return res.status(500).send({mesaje:'error en la peticion'})
+        }else if (departamentoEncontrado){
+            return res.status(500).send({mesaje:'departamento ya existente'})
+        }else{
+            departamento.nombre = params.nombre;
+        departamento.descripcion = params.descripcion;
+        departamento.save((err, departamentoGuardado)=>{
         if(err){
             res.status(500).send({message: 'Error en el servidor'});
         }else{
@@ -19,6 +25,11 @@ if(params.nombre){
             }
         }
     });
+        }
+
+    })
+    
+
 }
 }
 
@@ -48,9 +59,16 @@ function eliminarDepot(req,res){
         }
     })
 }
+
+function ObtenerDepto(req, res) {
+    Departamento.find({}, (err, deptofinded) => {
+      return res.status(200).send({ depto: deptofinded });
+    });
+  }
 module.exports = {
     addDepto,
     editarDepto,
-    eliminarDepot
+    eliminarDepot,
+    ObtenerDepto
 
 }

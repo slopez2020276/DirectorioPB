@@ -12,13 +12,8 @@ const validator = require("./src/routes/validator.routes");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
 
-const corsOptions = {
-    origin: '',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-  };
 // CABECERAS
-app.use(cors(corsOptions));
+app.use(cors());
 
 // CARGA DE RUTAS localhost:3000/api/productos
 

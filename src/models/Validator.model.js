@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const validator = Schema({
-    Fecha: String,
+    rol: String,
     password: String,
 });
 

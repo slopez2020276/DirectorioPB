@@ -10,7 +10,8 @@ const api = express.Router();
 
 api.post('/resgistrarDepto', controllersdepartamento.addDepto),
 api.put('/editarDepot/:idDeptos',controllersdepartamento.editarDepto),
-
+api.get('/ObtenerDepto',controllersdepartamento.ObtenerDepto),
+api.delete('/eliminarDepot/:idDeptos',controllersdepartamento.eliminarDepot)
 
 
 
